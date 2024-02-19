@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Видеопоток с камеры</title>
+</head>
+<body>
+<video id="video" playsinline autoplay></video>
+<img id="receivedImg" src="" alt="Received Image" style="display:block; width:100%; max-width: 640px;">
+<div id="repetitionsCount">0</div> <!-- Этот элемент будет отображать количество повторений -->
+
+<script>
+    const video = document.getElementById('video');
+    const receivedImg = document.getElementById('receivedImg');
+    const repetitionsCountElement = document.getElementById('repetitionsCount'); // Элемент для отображения repetitions_count
+
+
+    // Получаем доступ к медиа устройству
+    if (navigator.mediaDevices.getUserMedia) {
+        navigator.mediaDevices.getUserMedia({video: true})
+            .then(function (stream) {
+                video.srcObject = stream;
+            })
+            .catch(function (err) {
+                console.log("Что-то пошло не так!", err);
+            });
+    }
+
+    // Установка WebSocket соединения
+    const ws = new WebSocket((window.location.protocol === 'https:' ? 'wss://' : 'ws://') + window.location.host + '/ws');
+
+    ws.onmessage = function (event) {
+        const arrayBuffer = event.data;
+        const blob = new Blob([arrayBuffer], {type: "image/jpeg"});
+        receivedImg.src = URL.createObjectURL(blob);
+        repetitionsCountElement.innerText = event.data; // Обновляем значение на странице
+
+    };
+
+    // Посылаем кадры с камеры через WebSocket
+    video.addEventListener('play', () => {
+        const canvas = document.createElement('canvas');
+        const context = canvas.getContext('2d');
+        const sendFrame = () => {
+            if (video.paused || video.ended) {
+                return;
+            }
+            context.drawImage(video, 0, 0, canvas.width, canvas.height);
+            canvas.toBlob(blob => {
+                blob.arrayBuffer().then(buffer => {
+                    const uint8View = new Uint8Array(buffer);
+                    ws.send(uint8View);
+                });
+            }, 'image/jpeg');
+            requestAnimationFrame(sendFrame);
+        };
+        sendFrame();
+    });
+</script>
+</body>
+</html>
+
