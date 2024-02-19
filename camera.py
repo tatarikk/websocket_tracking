@@ -33,7 +33,7 @@ def process_image(frame):
 
     frame_resized = cv2.resize(frame, (new_width, new_height), interpolation=cv2.INTER_NEAREST)
 
-    imgRGB = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
+    imgRGB = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
     results = pose.process(imgRGB)
 
     if results.pose_landmarks:
