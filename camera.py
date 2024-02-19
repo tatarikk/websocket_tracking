@@ -18,8 +18,8 @@ jump_started = False
 repetitions_count = 0
 pTime = 0
 
-new_width = 320
-new_height = 240
+new_width = 128
+new_height = 128
 
 desired_fps = 15
 
