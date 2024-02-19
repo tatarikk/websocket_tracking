@@ -28,7 +28,7 @@ desired_fps = 15
 app.mount("/static", StaticFiles(directory="static"), name="static")
 
 
-async def process_image(frame):
+def process_image(frame):
     global jump_started, repetitions_count, pTime
 
     frame_resized = cv2.resize(frame, (new_width, new_height), interpolation=cv2.INTER_NEAREST)
