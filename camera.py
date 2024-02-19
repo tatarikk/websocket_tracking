@@ -67,7 +67,7 @@ def process_image(frame):
     fps = 1 / (cTime - pTime)
     pTime = cTime
 
-    time.sleep(1 / desired_fps)
+    #time.sleep(1 / desired_fps)
     
     cv2.putText(imgRGB, f'FPS: {int(fps)}', (10, 30), cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 255, 0), 2)
 
