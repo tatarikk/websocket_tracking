@@ -11,7 +11,7 @@ from starlette.websockets import WebSocketDisconnect
 app = FastAPI()
 
 mpPose = mp.solutions.pose
-pose = mpPose.Pose()
+pose = mpPose.Pose(static_image_mode=False, model_complexity=0, smooth_landmarks=False, enable_segmentation=False)
 mpDraw = mp.solutions.drawing_utils
 
 jump_started = False
