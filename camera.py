@@ -21,7 +21,7 @@ pTime = 0
 new_width = 128
 new_height = 128
 
-desired_fps = 5
+desired_fps = 6
 
 
 # Подключаем статические файлы
