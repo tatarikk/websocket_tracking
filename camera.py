@@ -18,12 +18,20 @@ jump_started = False
 repetitions_count = 0
 pTime = 0
 
+new_width = 320
+new_height = 240
+
+desired_fps = 15
+
+
 # Подключаем статические файлы
 app.mount("/static", StaticFiles(directory="static"), name="static")
 
 
 def process_image(frame):
     global jump_started, repetitions_count, pTime
+
+    frame_resized = cv2.resize(frame, (new_width, new_height), interpolation=cv2.INTER_NEAREST)
 
     imgRGB = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
     results = pose.process(imgRGB)
@@ -58,6 +66,11 @@ def process_image(frame):
     cTime = time.time()
     fps = 1 / (cTime - pTime)
     pTime = cTime
+
+    time.sleep(1 / desired_fps)
+    
+    cv2.putText(imgRGB, f'FPS: {int(fps)}', (10, 30), cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 255, 0), 2)
+
 
     return imgRGB, fps, repetitions_count
 
