@@ -79,8 +79,8 @@ async def websocket_endpoint(websocket: WebSocket):
 
             # Отправляем изображение обратно на клиент
             _, img_encoded = cv2.imencode('.jpg', track_img)
-            #await websocket.send_bytes(img_encoded.tobytes()) # если хотим видеть точки, включить
-            await websocket.send_text(str(repetitions_count))
+            await websocket.send_bytes(img_encoded.tobytes()) # если хотим видеть точки, включить
+            #await websocket.send_text(str(repetitions_count))
 
     except WebSocketDisconnect:
         print("Клиент закрыл соединение")
