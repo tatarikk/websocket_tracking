@@ -6,7 +6,6 @@ COPY . .
 
 RUN pip install -r requirements.txt
 
-RUN pip uninstall uvicorn
 RUN pip install 'uvicorn[standard]'
 
 EXPOSE 8000
