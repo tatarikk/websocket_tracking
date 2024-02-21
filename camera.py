@@ -21,7 +21,7 @@ pTime = 0
 new_width = 128
 new_height = 128
 
-desired_fps = 120
+desired_fps = 15
 
 # Подключаем статические файлы
 app.mount("/static", StaticFiles(directory="static"), name="static")
@@ -66,7 +66,7 @@ def process_image(frame):
     fps = 1 / (cTime - pTime)
     pTime = cTime
 
-    #time.sleep(1 / desired_fps)
+    time.sleep(1 / desired_fps)
 
     cv2.putText(imgRGB, f'FPS: {int(fps)}', (10, 30), cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 255, 0), 2)
 
