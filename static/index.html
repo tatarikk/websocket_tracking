@@ -40,21 +40,36 @@
     video.addEventListener('play', () => {
         const canvas = document.createElement('canvas');
         const context = canvas.getContext('2d');
+        const fps = 10;
+        const interval = 1000 / fps;
+
         const sendFrame = () => {
             if (video.paused || video.ended) {
                 return;
             }
-            context.drawImage(video, 0, 0, canvas.width, canvas.height);
+
+            // Вычисляем размеры для сохранения соотношения сторон и уменьшения до 720p
+            const aspectRatio = video.videoWidth / video.videoHeight;
+            let targetHeight = 120;
+            let targetWidth = aspectRatio * targetHeight;
+
+            // Устанавливаем размеры холста
+            canvas.width = targetWidth;
+            canvas.height = targetHeight;
+
+            context.drawImage(video, 0, 0, targetWidth, targetHeight);
             canvas.toBlob(blob => {
                 blob.arrayBuffer().then(buffer => {
                     const uint8View = new Uint8Array(buffer);
                     ws.send(uint8View);
                 });
-            }, 'image/jpeg');
-            requestAnimationFrame(sendFrame);
+            }, 'image/jpeg', 0.7); // Устанавливаем качество изображения, например, 0.7 для снижения размера файла
+
+            setTimeout(sendFrame, interval);
         };
         sendFrame();
     });
+
 </script>
 </body>
 </html>
