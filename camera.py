@@ -21,8 +21,7 @@ pTime = 0
 new_width = 128
 new_height = 128
 
-desired_fps = 6
-
+desired_fps = 120
 
 # Подключаем статические файлы
 app.mount("/static", StaticFiles(directory="static"), name="static")
@@ -61,16 +60,15 @@ def process_image(frame):
         for id, lm in enumerate(results.pose_landmarks.landmark):
             h, w, c = imgRGB.shape
             cx, cy = int(lm.x * w), int(lm.y * h)
-            cv2.circle(imgRGB, (int(cx), int(cy)), 10, (255, 0, 0), cv2.FILLED)
+            cv2.circle(imgRGB, (int(cx), int(cy)), 5, (255, 0, 0), cv2.FILLED)
 
     cTime = time.time()
     fps = 1 / (cTime - pTime)
     pTime = cTime
 
-    time.sleep(1 / desired_fps)
-    
-    cv2.putText(imgRGB, f'FPS: {int(fps)}', (10, 30), cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 255, 0), 2)
+    #time.sleep(1 / desired_fps)
 
+    cv2.putText(imgRGB, f'FPS: {int(fps)}', (10, 30), cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 255, 0), 2)
 
     return imgRGB, fps, repetitions_count
 
@@ -92,7 +90,7 @@ async def websocket_endpoint(websocket: WebSocket):
 
             # Отправляем изображение обратно на клиент
             _, img_encoded = cv2.imencode('.jpg', track_img)
-            await websocket.send_bytes(img_encoded.tobytes()) # если хотим видеть точки, включить
+            await websocket.send_bytes(img_encoded.tobytes())  # если хотим видеть точки, включить
             #await websocket.send_text(str(repetitions_count))
 
     except WebSocketDisconnect:
