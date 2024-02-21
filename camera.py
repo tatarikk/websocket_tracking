@@ -21,7 +21,7 @@ pTime = 0
 new_width = 128
 new_height = 128
 
-#desired_fps = 16
+desired_fps = 120
 
 # Подключаем статические файлы
 app.mount("/static", StaticFiles(directory="static"), name="static")
